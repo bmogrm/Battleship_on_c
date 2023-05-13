@@ -1,18 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
+#include <conio.h>
 
 typedef struct player{
-	int hits[10][10];
-	int ships[10][10];
-	int score[5];
-	int difficult; // 1 - обычный, 2 - продвинутый уровень сложности
+	int hits[10][10];	// Сохранение состояний выстрелов
+	int ships[10][10];	// Местоположение кораблей
+	int score[5];		// Рекорды игрока (в разработке)
+	int difficult; 		// 1 - обычный, 2 - продвинутый уровень сложности
 } player; 
 
-void game();
-void choose_difficult(player *im);
-void player_score();
+typedef enum{			// Перечисление состояний ячейки поля
+	EMPTY = 0,
+	SHOT,
+	STRIKE,
+	KILL,
+	SHIP,
+	COUNT
+}FieldInfo;
+
+char draw_symbol[COUNT] =  // Для отрисовки состояния поля по навзванию
+{
+	'~',	// EMPTY
+	'*',	// SHOT
+	'X',	// STRIKE
+	'#',	// KILL
+	'S'		// SHIP
+};
+
+#define FIELD_SIZE 10
+//------- Функции для главного экрана игры -------------------------------------
+void game(); 						// Начать игру
+void choose_difficult(player *im);  // Выбрать сложность игры
+void player_score();				// Таблица рекордов игрока
+//------- Вспомогательные функции для game(); ----------------------------------
+void draw_field();					// Отрисовка игрового поля
 
 int main(){
 	system("chcp 1251 > nul");
@@ -56,9 +78,50 @@ int main(){
 }
 
 void game(){
+	draw_field();
 	printf("Находится в разработке . . .\n\n");
 	system("pause");
 	system("cls");
+}
+   
+char *field[] = 
+{
+	"  ABCDIFGHKL        ABCDIFGHKL ",
+    " *----------*      *----------*",
+    "0|          |     0|          |",
+    "1|          |     1|          |",
+    "2|          |     2|          |",
+    "3|          |     3|          |",
+    "4|          |     4|          |",
+    "5|          |     5|          |",
+    "6|          |     6|          |",
+    "7|          |     7|          |",
+    "8|          |     8|          |",
+    "9|          |     9|          |",
+    " *----------*      *----------*"
+	
+};
+
+void draw_field(){
+	int i = 0, j = 0;
+	printf("%s\n", field[0]);
+	printf("%s\n", field[1]);
+	for(i = 2; i < FIELD_SIZE+2; i++)
+	{
+		printf("%c%c", field[i][0], field[i][1]);
+		for(j = 0; j < FIELD_SIZE; j++)
+		{
+			printf("%c", draw_symbol[EMPTY]);
+		}
+		printf("%c     ", field[i][12]);
+		printf("%c%c", field[i][18], field[i][19]);
+		for(j = 0; j < FIELD_SIZE; j++)
+		{
+			printf("%c", draw_symbol[EMPTY]);
+		}
+		printf("%c\n", field[i][30]);
+	}
+	printf("%s\n", field[12]);
 }
 
 void choose_difficult(player *im){
