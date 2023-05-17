@@ -5,7 +5,6 @@
 
 typedef struct player{
 	int hits[10][10];	// Сохранение состояний выстрелов
-	int ships[10][10];	// Местоположение кораблей
 	int score[5];		// Рекорды игрока (в разработке)
 	int difficult; 		// 1 - обычный, 2 - продвинутый уровень сложности
 } player; 
@@ -30,11 +29,11 @@ char draw_symbol[COUNT] =  // Для отрисовки состояния поля по навзванию
 
 #define FIELD_SIZE 10
 //------- Функции для главного экрана игры -------------------------------------
-void game(); 						// Начать игру
+void game(player *im); 						// Начать игру
 void choose_difficult(player *im);  // Выбрать сложность игры
 void player_score();				// Таблица рекордов игрока
 //------- Вспомогательные функции для game(); ----------------------------------
-void draw_field();					// Отрисовка игрового поля
+void draw_field(player *im);					// Отрисовка игрового поля
 
 int main(){
 	system("chcp 1251 > nul");
@@ -59,7 +58,7 @@ int main(){
 		switch(choose) {
 			case 1: // Начать игру
 				system("cls");
-				game();
+				game(&im);
 				break;
 			case 2: // Сменить уровень сложности
 				
@@ -77,8 +76,8 @@ int main(){
 	
 }
 
-void game(){
-	draw_field();
+void game(player *im){
+	draw_field(im);
 	printf("Находится в разработке . . .\n\n");
 	system("pause");
 	system("cls");
@@ -102,7 +101,7 @@ char *field[] =
 	
 };
 
-void draw_field(){
+void draw_field(player *im){
 	int i = 0, j = 0;
 	printf("%s\n", field[0]);
 	printf("%s\n", field[1]);
